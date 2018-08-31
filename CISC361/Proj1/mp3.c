@@ -25,11 +25,13 @@ void test(){
     song->song_artist = "1";
     struct SongNode* song2 = malloc(sizeof(struct SongNode));
     song2->song_title = "B";
+    song2->song_artist = "0";
     struct SongNode* song3 = malloc(sizeof(struct SongNode));
     song3->song_title = "C";
-    song->song_artist = "0";
+    song3->song_artist = "0";
     struct SongNode* song4 = malloc(sizeof(struct SongNode));
     song4->song_title = "D";
+    song4->song_artist = "1";
     //song->song_artist = "Maxo";
     //song->release_date ="A while ago";
     //song->runtime=4*60;
@@ -41,10 +43,15 @@ void test(){
     printForwards(list);
     printf("####################\n");
     deleteArtist(list, "1");
+    printBackwards(list);
+    printf("######################\n");
+    deleteArtist(list, "0");
     printForwards(list);
 
+    free(list);
 
-    //free(song);
+
+    //free(song);f
     //free(list);
     //deleteList(list);
 }
@@ -92,7 +99,13 @@ void deleteArtist(struct SongDoubleLinkedList* list, char* artist){
             //Artist is at the head
             if(current == list->head){
                 list->head = current->next;
-                list->head->prev = NULL;
+                if(current-> next != NULL){
+                    list->head->prev = NULL;
+                }else{
+                    //If we are at the head and the next item is NULL
+                    //This is also the tail of the list
+                    list->tail = list->head;
+                }
                 free(current);
             }else if(current == list->tail){
                 list->tail = list->tail->prev;
