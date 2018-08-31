@@ -25,3 +25,4 @@ void appendSong(struct SongDoubleLinkedList*, struct SongNode*);
 void deleteArtist(struct SongDoubleLinkedList*, char*);
 void printForwards(struct SongDoubleLinkedList*);
 void printBackwards(struct SongDoubleLinkedList*);
+void deleteList(struct SongDoubleLinkedList*);

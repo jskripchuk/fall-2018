@@ -11,14 +11,23 @@ Assignment 1
 
 int main(){
     
+    
+    //printSong(song);
+    test();
+    return 0;
+}
+
+void test(){
     struct SongDoubleLinkedList* list = malloc(sizeof(struct SongDoubleLinkedList));
     //printf("%d", list->head==NULL);
     struct SongNode* song = malloc(sizeof(struct SongNode));
     song->song_title = "A";
+    song->song_artist = "1";
     struct SongNode* song2 = malloc(sizeof(struct SongNode));
     song2->song_title = "B";
     struct SongNode* song3 = malloc(sizeof(struct SongNode));
     song3->song_title = "C";
+    song->song_artist = "0";
     struct SongNode* song4 = malloc(sizeof(struct SongNode));
     song4->song_title = "D";
     //song->song_artist = "Maxo";
@@ -29,9 +38,15 @@ int main(){
     appendSong(list, song2);
     appendSong(list, song3);
     appendSong(list, song4);
-    printBackwards(list);
-    //printSong(song);
-    return 0;
+    printForwards(list);
+    printf("####################\n");
+    deleteArtist(list, "1");
+    printForwards(list);
+
+
+    //free(song);
+    //free(list);
+    //deleteList(list);
 }
 
 void appendSong(struct SongDoubleLinkedList* list, struct SongNode* song){
@@ -49,6 +64,17 @@ void appendSong(struct SongDoubleLinkedList* list, struct SongNode* song){
     }
 }
 
+//Safely deletes and frees the memory for the whole list
+void deleteList(struct SongDoubleLinkedList* list){
+    struct SongNode* current = list->head;
+    while(current != NULL){
+        struct SongNode* to_delete = current;
+        current=current->next;
+        free(to_delete);
+    }
+    free(list);
+}
+
 void deleteArtist(struct SongDoubleLinkedList* list, char* artist){
     //Four Cases
     //1) List is Empty
@@ -59,8 +85,27 @@ void deleteArtist(struct SongDoubleLinkedList* list, char* artist){
     struct SongNode* current = list->head;
 
     //First see if the list is empty
-    if(current != NULL){
+    while(current != NULL){
+        struct SongNode* next = current->next;
+        //If the strings are the same, we delete the node
+        if(strcmp(artist, current->song_artist)==0){
+            //Artist is at the head
+            if(current == list->head){
+                list->head = current->next;
+                list->head->prev = NULL;
+                free(current);
+            }else if(current == list->tail){
+                list->tail = list->tail->prev;
+                list->tail->next = NULL;
+                free(current);
+            }else{
+                current->prev->next = current->next;
+                current->next->prev = current->prev;
+                free(current);
+            }
+        }
 
+        current = next;
     }
 }
 
