@@ -1,3 +1,10 @@
+/*
+James Skripchuk
+CISC361
+Assignment 1
+*/
+
+
 struct SongNode{
     char* song_artist;
     char* song_title;
