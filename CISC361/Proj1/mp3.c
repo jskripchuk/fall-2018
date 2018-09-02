@@ -10,50 +10,92 @@ Assignment 1
 #include "defs.h"
 
 int main(){
-    
-    
-    //printSong(song);
-    test();
+    int exit_program = 0;
+    struct SongDoubleLinkedList* songList = malloc(sizeof(struct SongDoubleLinkedList));
+    struct SongNode* song;
+
+    while(exit_program != 1){
+        int choice;
+        printf("\nList Operations\n");
+        printf("===============\n");
+        printf("1. Add an MP3 to the list\n");
+        printf("2. Delete MP3s based on artist\n");
+        printf("3. Print List Forwards\n");
+        printf("4. Print List Backwards\n");
+        printf("5. Exit\n");
+        printf("Choice: ");
+        
+        
+        int BUFFERSIZE = 128;
+        char buffer[BUFFERSIZE];
+        int len;
+
+        //Somehow eats the newline?
+        //https://stackoverflow.com/questions/20150845/c-program-skips-fgets
+        scanf("%d",&choice);
+        getchar();
+        //choice = 1;
+        switch(choice){
+            case 1:
+                song =  malloc(sizeof(struct SongNode));
+                printf("\nEnter the song's title: ");
+                fgets(buffer, BUFFERSIZE, stdin);
+                len = (int)strlen(buffer);
+                buffer[len-1] = '\0';
+                song->song_title = (char*)malloc(len);
+                strcpy(song->song_title,buffer);
+
+                printf("Enter the song's artist: ");
+                fgets(buffer, BUFFERSIZE, stdin);
+                len = (int)strlen(buffer);
+                buffer[len-1] = '\0';
+                song->song_artist = (char*)malloc(len);
+                strcpy(song->song_artist,buffer);    
+
+                printf("Enter the song's release date: ");
+                fgets(buffer, BUFFERSIZE, stdin);
+                len = (int)strlen(buffer);
+                buffer[len-1] = '\0';
+                song->release_date = (char*)malloc(len);
+                strcpy(song->release_date,buffer);            
+                //printf("\n Enter the song's runtime (in seconds): ");
+                int* runtime = malloc(sizeof(int));
+                printf("Enter the song's runtime (in seconds): ");
+                scanf("%d", runtime);
+                song->runtime = runtime;
+
+                appendSong(songList, song);
+                //printSong(song);
+                //printf("\nEnter the song's artist: ");
+                
+                break;
+            case 2:
+                printf("\nEnter the artist's who's songs you want to delete: ");
+                fgets(buffer, BUFFERSIZE, stdin);
+                len = (int)strlen(buffer);
+                buffer[len-1] = '\0';
+                char* artist = (char*)malloc(len);
+                strcpy(artist,buffer);
+                printf("%s", artist);
+                deleteArtist(songList, artist);
+                free(artist);
+                break;
+            case 3:
+                printForwards(songList);
+                break;
+            case 4:
+                printBackwards(songList);
+                break;
+            case 5:
+                free(songList);
+                exit_program = 1;
+                break;
+        }
+    }
+
+    free(songList);
+
     return 0;
-}
-
-void test(){
-    struct SongDoubleLinkedList* list = malloc(sizeof(struct SongDoubleLinkedList));
-    //printf("%d", list->head==NULL);
-    struct SongNode* song = malloc(sizeof(struct SongNode));
-    song->song_title = "A";
-    song->song_artist = "1";
-    struct SongNode* song2 = malloc(sizeof(struct SongNode));
-    song2->song_title = "B";
-    song2->song_artist = "0";
-    struct SongNode* song3 = malloc(sizeof(struct SongNode));
-    song3->song_title = "C";
-    song3->song_artist = "0";
-    struct SongNode* song4 = malloc(sizeof(struct SongNode));
-    song4->song_title = "D";
-    song4->song_artist = "1";
-    //song->song_artist = "Maxo";
-    //song->release_date ="A while ago";
-    //song->runtime=4*60;
-
-    appendSong(list, song);
-    appendSong(list, song2);
-    appendSong(list, song3);
-    appendSong(list, song4);
-    printForwards(list);
-    printf("####################\n");
-    deleteArtist(list, "1");
-    printBackwards(list);
-    printf("######################\n");
-    deleteArtist(list, "0");
-    printForwards(list);
-
-    free(list);
-
-
-    //free(song);f
-    //free(list);
-    //deleteList(list);
 }
 
 void appendSong(struct SongDoubleLinkedList* list, struct SongNode* song){
@@ -82,6 +124,14 @@ void deleteList(struct SongDoubleLinkedList* list){
     free(list);
 }
 
+void freeSong(struct SongNode* song){
+    free(song->song_artist);
+    free(song->song_title);
+    free(song->release_date);
+    free(song->runtime);
+    free(song);
+}
+
 void deleteArtist(struct SongDoubleLinkedList* list, char* artist){
     //Four Cases
     //1) List is Empty
@@ -99,6 +149,7 @@ void deleteArtist(struct SongDoubleLinkedList* list, char* artist){
             //Artist is at the head
             if(current == list->head){
                 list->head = current->next;
+                
                 if(current-> next != NULL){
                     list->head->prev = NULL;
                 }else{
@@ -106,15 +157,15 @@ void deleteArtist(struct SongDoubleLinkedList* list, char* artist){
                     //This is also the tail of the list
                     list->tail = list->head;
                 }
-                free(current);
+                freeSong(current);
             }else if(current == list->tail){
                 list->tail = list->tail->prev;
                 list->tail->next = NULL;
-                free(current);
+                freeSong(current);
             }else{
                 current->prev->next = current->next;
                 current->next->prev = current->prev;
-                free(current);
+                freeSong(current);
             }
         }
 
@@ -147,7 +198,7 @@ void printSong(struct SongNode* song){
     song->song_title,
     song->song_artist,
     song->release_date,
-    song->runtime,
+    *(song->runtime),
     header);
     printf(buffer);
 }

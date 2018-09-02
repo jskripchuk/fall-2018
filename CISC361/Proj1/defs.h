@@ -5,16 +5,17 @@ Assignment 1
 */
 
 
-struct SongNode{
+typedef struct SongNode{
     char* song_artist;
     char* song_title;
     char* release_date;
     struct SongNode* next;
     struct SongNode* prev; 
-    int runtime;
-};
+    int* runtime;
+} song_t;
 
 void printSong(struct SongNode*);
+void freeSong(struct SongNode*);
 
 struct SongDoubleLinkedList{
     struct SongNode* head;
