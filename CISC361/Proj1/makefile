@@ -1,5 +1,5 @@
 mp3: 
-	gcc -g -o mp3 mp3.c -I.
+	gcc -g -o mp3 mp3.c list_ops.c -I.
 
 clean:
 	rm mp3
