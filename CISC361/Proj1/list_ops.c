@@ -1,3 +1,10 @@
+/*
+James Skripchuk
+CISC361
+Assignment 1
+Last Updated: 9/4/18
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
