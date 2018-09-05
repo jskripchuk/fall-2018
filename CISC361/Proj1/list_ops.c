@@ -65,14 +65,22 @@ void deleteArtist(struct SongDoubleLinkedList* list, char* artist){
                     //This is also the tail of the list
                     list->tail = list->head;
                 }
+
+                //Delete the node
                 freeSong(current);
             }else if(current == list->tail){
+                //If the current node is the tail, swap the tail
                 list->tail = list->tail->prev;
                 list->tail->next = NULL;
+
+                //Delete
                 freeSong(current);
             }else{
+                //Else we're in the middle so we do some swaps
                 current->prev->next = current->next;
                 current->next->prev = current->prev;
+
+                //Delete
                 freeSong(current);
             }
         }
