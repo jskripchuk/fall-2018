@@ -153,5 +153,5 @@ void printSong(struct SongNode* song){
     header);
 
     //Print
-    printf(buffer);
+    printf("%s",buffer);
 }
