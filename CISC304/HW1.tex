@@ -228,10 +228,32 @@ Since \ref{eq:3} holds for the base case, and \ref{eq:3} also holds for any arbi
 %	PROBLEM 4
 %----------------------------------------------------------------------------------------
 \section{Problem 4}
+Consider the alphabet $\sum = \{0,1\}$ and the following definition of the set $S$ of strings:
+
+$1 \in S \\
+100 \in S$ \\
+if $s \in S$ then $11s \in S$ (denoted $A(s)$)\\
+if $s \in S$ then $00s \in S$ (denoted $B(s)$)\\
+
+Prove by structural induction that every string $s \in S$ has an odd number of 1's and an even number of 0's
+
 \subsection{Base Case}
+
+Two base cases: \\
+1 has an odd number of 1's and an even number of 0's, so thus the proposition holds.  \\
+100 has an odd number of 1's and an even number of 0's, so thus the proposition holds.\\
+We can now continue with the induction.
 \subsection{Induction Hypothesis}
+Assume that $\omega$ is a string that has an odd number of 1's and an even number of 0's, and that $\omega \in S$
 \subsection{Induction Step}
+Case 1: \\
+Using the first transformation function, $A(\omega)=11\omega$. Since $\omega$ had an odd number of 1's to begin with (by the induction hypothesis), adding two more 1's still result in an odd number of 1's. Also since $\omega$ had an even 0's to begin with (by the induction hypothesis), no more 0's are added so the number of 0's is still even. Thus the proposition holds that $A(\omega) \in S$ and it has an odd number of 1's and an even number of 0's \\ 
+\\
+Case 2: \\
+Using the second transformation function, $B(\omega)=00\omega$. Since $\omega$ had an odd number of 1's to begin with (by the induction hypothesis), adding no 1's still result in an odd number of 1's. Also since $\omega$ had an even 0's to begin with (by the induction hypothesis), two more 0's are added so thus number of 0's is still even. Thus the proposition holds that $B(\omega) \in S$ and it has an odd number of 1's and an even number of 0's
 \subsection{Conclusion}
+
+Since we have shown that given an arbitrary string $s \in S$, we can construct a new string that is also in $S$, and we have proven the base cases. We now know that any string constructed using the rules will have an oddn umber of 1's and an even number of 0's.
 
 
 
