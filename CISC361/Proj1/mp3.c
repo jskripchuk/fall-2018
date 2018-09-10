@@ -76,7 +76,7 @@ int main(){
 
                 //Runtime
                 int* runtime = malloc(sizeof(int));
-                printf("Enter the song's runtime (in seconds): ");
+                printf("Enter the song's runtime (in seconds) as an integer: ");
                 scanf("%d", runtime);
                 song->runtime = runtime;
 
