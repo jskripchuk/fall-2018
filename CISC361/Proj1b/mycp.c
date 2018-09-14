@@ -19,8 +19,9 @@ int main(int argc, char** argv){
     char SOURCE_ERROR[] = "Source file does not exist!\n";
     char PERMISSIONS_ERROR[] = "Insufficent permissions for source file!\n";
     char WRITE_ERROR[] = "Error writing to file! \n";
-    char EXISTS_MESSAGE[] = "Destination file already exists. Overwrite? [0/1]: \n";
+    char STAT_ERROR[] = "Error grabbing permissions of file! \n";
 
+    char EXISTS_MESSAGE[] = "Destination file already exists. Overwrite? [0/1]: \n";
 
     //mycp must take 3 arguments
     if(argc != 3){
@@ -41,14 +42,11 @@ int main(int argc, char** argv){
     //If destination file already exists, prompt user if they want to overwrite
     if(access(argv[2], F_OK) == 0){
         write(STDOUT_FILENO, EXISTS_MESSAGE, strlen(EXISTS_MESSAGE));
-        //read(STDIN_FILENO, buf, BUFFSIZE);
+      
+	//Tried my hardest to use only system calls but getting user input here was difficult
+	//SO we're back to being sane programmers and using scanf 
 	int input;
 	scanf("%d", &input);
-        //int len;
-        //len = (int)strlen(buf);
-        //buf[len-1]='\0';
-	//printf("%s",buf);
-	//printf("%d", strcmp(buf, "Y"));
 
         //Loops until a valid input is reached
         while(input != 0 && input != 1){
@@ -65,16 +63,20 @@ int main(int argc, char** argv){
     //Open files
     int source = open(argv[1], O_RDONLY);
     struct stat st;
+
+    //Stat the file to give the copied file the same permissions as the original
     if(fstat(source, &st) == -1){
+	write(STDOUT_FILENO, STAT_ERROR, strlen(STAT_ERROR));
 	return -1;    
     }
-	
+
+    //Open the destination file - create it if it doesn't exits, and if it does exist zero it out.	
     int dest = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, st.st_mode);
 
     int n;
     //Write in data from source file into destination file
     while ((n = read(source, buf, BUFFSIZE)) > 0){
-		if (write(dest, buf, n) != n){
+	if (write(dest, buf, n) != n){
             write(STDERR_FILENO, WRITE_ERROR, strlen(WRITE_ERROR));
             return -1;
         }
