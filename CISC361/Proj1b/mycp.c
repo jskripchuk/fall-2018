@@ -63,7 +63,12 @@ int main(int argc, char** argv){
 
     //Open files
     int source = open(argv[1], O_RDONLY);
-    int dest = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, fstat(source).st_mode);
+    struct stat st;
+    if(fstat(source, &st) == -1){
+	return -1;    
+    }
+	
+    int dest = open(argv[2], O_CREAT | O_WRONLY | O_TRUNC, st.st_mode);
 
     int n;
     //Write in data from source file into destination file
