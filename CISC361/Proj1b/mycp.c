@@ -7,7 +7,7 @@ Project 1b: mycp
 #include <unistd.h>
 #include <fcntl.h>
 #include <string.h>
-
+#include <stdio.h>
 #define	BUFFSIZE 2048
 
 int main(int argc, char** argv){
@@ -19,7 +19,7 @@ int main(int argc, char** argv){
     char SOURCE_ERROR[] = "Source file does not exist!\n";
     char PERMISSIONS_ERROR[] = "Insufficent permissions for source file!\n";
     char WRITE_ERROR[] = "Error writing to file! \n";
-    char EXISTS_MESSAGE[] = "Destination file already exists. Overwrite? [Y/N]: \n";
+    char EXISTS_MESSAGE[] = "Destination file already exists. Overwrite? [0/1]: \n";
 
 
     //mycp must take 3 arguments
@@ -41,22 +41,23 @@ int main(int argc, char** argv){
     //If destination file already exists, prompt user if they want to overwrite
     if(access(argv[2], F_OK) == 0){
         write(STDOUT_FILENO, EXISTS_MESSAGE, strlen(EXISTS_MESSAGE));
-        read(STDIN_FILENO, buf, BUFFSIZE);
-
-        int len;
-        len = (int)strlen(buf);
-        buf[len-1]='\0';
+        //read(STDIN_FILENO, buf, BUFFSIZE);
+	int input;
+	scanf("%d", &input);
+        //int len;
+        //len = (int)strlen(buf);
+        //buf[len-1]='\0';
+	//printf("%s",buf);
+	//printf("%d", strcmp(buf, "Y"));
 
         //Loops until a valid input is reached
-        while(strcmp(buf, "Y") != 0 && strcmp(buf, "N") != 0){
+        while(input != 0 && input != 1){
             write(STDOUT_FILENO, EXISTS_MESSAGE, strlen(EXISTS_MESSAGE));
-            read(STDIN_FILENO, buf, BUFFSIZE);
-            len = (int)strlen(buf);
-            buf[len-1]='\0';
+            scanf("%d",&input);
         }
 
         //Exit if N is selected
-        if(strcmp(buf, "N") == 0){
+        if(input == 0){
           return 0;
         }
     }
